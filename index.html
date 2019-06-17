@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+  <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+      AngularJS
+    </title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular-route.min.js"></script>
+    <style>
+        a{
+            text-decoration: none;
+            cursor: pointer;
+        }
+    </style>
+  </head>
+  <body>
+    <div ng-controller="MyController">
+      <div class="container-fluid">
+        <h2 style="text-align: center;padding:16px;">{{ welcome_message }}</h2>
+        <hr />
+        
+      </div>
+    </div>
+    <div ng-view>
+        
+    </div>
+    
+
+    <script>
+      angular.module("myApp", ["ngRoute"]).controller("MyController", [
+        "$scope","$location","user",
+        function($scope, $location, user) {
+          var messages = ["Hello!", "Welcome!", "Hola!"];
+          $scope.welcome_message =
+            messages[Math.floor(Math.random() * messages.length)];
+
+            $scope.getDetails = function(){
+                console.log("Clicked")
+
+                var details = {
+                    name:$scope.name,
+                    email:$scope.email,
+                    mobile:$scope.mobile,
+                    qualification:$scope.qualification,
+                    experience:$scope.experience,
+                    password:$scope.password
+                }
+
+                if(details.password !== $scope.cpassword){
+                    alert('Passwords do not match')
+                    console.log($location.path())
+                }
+
+                else{
+                    console.log(details)
+                    user.store(details)
+                    $location.path('/profile')
+                }
+            }
+
+            $scope.redirect_profile = function(){
+                console.log('Changin Paths')
+                $location.path('/profile')
+            }
+        }
+      ]).controller("MyController2", [
+        "$scope","user","$location",
+        function($scope,user,$location) {
+          $scope.data = user.userdata()  
+          $scope.skilldata = user.userskills() 
+          console.log($scope.data)
+          console.log($scope.skilldata);
+          
+
+          if($scope.data === undefined){
+            $location.path('/')
+          }
+
+          $scope.addSkill = function(){
+              if($scope.skill !== "" && $scope.skillDescription !== ""){
+                  var skill = {title:$scope.skill, description:$scope.skillDescription}
+                user.addSkills(skill)
+                $scope.skill = ""
+                $scope.skillDescription = ""
+                $location.path('/profile')
+              }
+          }
+
+          $scope.deleteskill = function(id){
+              console.log(id)
+              user.deleteskill(id)
+              $location.path('/profile')
+          }
+        }
+      ]).directive('digits',function(){
+          return {
+            restrict: 'A',
+            link: function (scope, elm, attrs, ctrl) {
+                elm.on('keydown', function (event) {
+                    if(event.shiftKey){event.preventDefault(); return false;}
+                    if ([8, 13, 27, 37, 38, 39, 40].indexOf(event.which) > -1) {
+                        return true;
+                    } 
+                    
+                    else if (event.which >= 48 && event.which <= 57) {
+                        return true;
+                    } 
+                    
+                    else if (event.which >= 96 && event.which <= 105) {
+                        return true;
+                    } 
+                    
+                    else {
+                        event.preventDefault();
+                        return false;
+                    }
+                });
+            }   
+          }
+      }).directive('password',function(){
+          return {
+            restrict: 'A',
+            link: function (scope, elm, attrs, ctrl) {
+                elm.on('blur', function (event) {
+                    var error = false;
+                    var text = event.target.value
+                    console.log(text)
+                    let specials = ['!','@','#','$','%','^','&','*','(','0','_','-','+','=']
+                    let numbers = [0,1,2,3,4,5,6,7,8,9]
+                    numbers.some(number => {
+                        if(text.indexOf(number.toString()) == -1){
+                            error = true
+                        }
+
+                        else {
+                            error = false
+                            console.log('Breaking Numbers')
+                            return true;
+                        }
+                    })
+                    specials.some(special => {
+                        if(text.indexOf(special) == -1){
+                            error = true
+                        }
+
+                        else {
+                            error = false
+                            console.log('Breaking Special')
+                            return true;
+                        }
+                    })
+                    if(error == true){
+                        alert('Password should have a special character and number')
+                        event.target.value = ""
+                    }
+                });
+            }  
+          }
+      }).service("user",function(){
+          var user
+          var u_skills = []
+
+          this.store = function(data){
+              console.log(data)
+              this.user = data
+          }
+          this.userdata = function(){
+              return this.user;
+          }
+
+          this.addSkills = function(skill){
+              u_skills.push(skill)
+          }
+
+          this.userskills = function(){
+              return u_skills
+          }
+
+          this.deleteskill = function(index){
+            u_skills.splice(index,1)
+          }
+        }).config(function($routeProvider) {
+            $routeProvider
+            .when("/", {
+                templateUrl : "templates/login.html",
+                controller : "MyController"
+            })
+            .when("/profile", {
+                templateUrl : "templates/profile.html",
+                controller : "MyController2"
+            })
+        })
+
+      angular.element(function() {
+        angular.bootstrap(document, ["myApp"]);
+      });
+    </script>
+  </body>
+</html>

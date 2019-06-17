@@ -1,0 +1,83 @@
+<div class="container">
+        <div class="row">
+          <div class="col-md-6 mx-auto">
+            <form>
+              <div class="form-group">
+                <label>Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Enter Full Name"
+                  required
+                  ng-model="name"
+                />
+              </div>
+              <div class="form-group">
+                <label>Email address</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  placeholder="Enter Email Address"
+                  required
+                  ng-model="email"
+                />
+              </div>
+              <div class="form-group">
+                <label>Qualification</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Enter Your Qualification"
+                  required
+                  ng-model="qualification"
+                />
+              </div>
+              <div class="form-group">
+                  <label>Work Experience</label>
+                  <input
+                      type="text"
+                      class="form-control"
+                      placeholder="Years of Experience"
+                      required
+                      digits
+                      ng-model="experience"
+                  />
+              </div>
+              <div class="form-group">
+                <label>Mobile</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  placeholder="Enter Mobile Number"
+                  digits
+                  required
+                  ng-model="mobile"
+                />
+              </div>
+              <div class="form-group">
+                <label>Password</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  placeholder="Password"
+                  password
+                  required
+                  ng-model="password"
+                />
+              </div>
+              <div class="form-group">
+              <label>Confirm Password</label>
+              <input
+                  type="password"
+                  class="form-control"
+                  placeholder="Confirm Password"
+                  required
+                  ng-model="cpassword"
+              />
+              </div>
+              <button type="submit" ng-click="getDetails()"class="btn btn-primary">Submit</button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <br>

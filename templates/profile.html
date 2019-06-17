@@ -1,0 +1,49 @@
+<div class="container">
+    <h4>User Details</h4>
+    <div class="row">
+        <div class="col">
+            <ul>
+                <li>Name : {{data.name}}</li>
+                <li>Phone : {{data.mobile}}</li>
+                <li>Experience : {{data.experience}} years</li>
+                <li>Qualification : {{data.qualification}}</li>
+                <li>Email : {{data.email}}</li>
+            </ul>
+        </div>
+    </div>
+    <hr>
+    <br>
+    <h4>User Skills</h4>
+    <div class="row">
+        <div class="col">
+            <ul ng-repeat="skill in skilldata track by $index">
+                <li>{{skill.title}} - {{skill.description}}</li><a ng-click="deleteskill(index)">delete</a>
+            </ul>
+        </div>
+        
+        <div class="col">
+            <h5>Add Skills</h5>
+                <div class="form-group">
+                    <label>Title</label>
+                    <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Enter Skill Title"
+                        required
+                        ng-model="skill"
+                    />
+                </div>
+                <div class="form-group">
+                        <label>Description</label>
+                        <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Enter Skill Description"
+                            required
+                            ng-model="skillDescription"
+                        />
+                    </div>
+            <button type="submit" ng-click="addSkill()">Add Skill</button>
+        </div>
+    </div>
+</div>
